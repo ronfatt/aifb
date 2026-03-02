@@ -1,0 +1,31 @@
+:root {
+  --bg: #f3efe5;
+  --panel: #fffaf0;
+  --ink: #1f1c18;
+  --muted: #6a6256;
+  --accent: #b64d1f;
+  --border: #d7ccbb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(circle at top left, rgba(182, 77, 31, 0.12), transparent 28%),
+    linear-gradient(180deg, #f8f3e8 0%, #f2ebde 100%);
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}

@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/workflows/daily-run",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/workflows/daily-run",
+      "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/workflows/collect-metrics",
+      "schedule": "0 15 * * *"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "pageId": "PAGE_A",
+  "pageName": "Malay Viral Stories",
+  "publishFrequencyPerDay": 1,
+  "language": "ms-MY",
+  "tone": "emotional-realistic",
+  "contentTypes": ["story_long", "short_rant"],
+  "targetEmotions": ["anger_to_hope", "relief", "validation"],
+  "constraints": [
+    "no real person accusation",
+    "no hate",
+    "no religious conflict",
+    "no racial conflict",
+    "no medical advice"
+  ],
+  "ctaStyles": ["question", "vote", "what-would-you-do"],
+  "hookPatterns": ["confessional", "hard-truth", "social-contrast"]
+}

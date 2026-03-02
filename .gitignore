@@ -1,0 +1,6 @@
+.env.local
+.next
+node_modules
+tsconfig.tsbuildinfo
+.DS_Store
+FB app api token ky.docx
