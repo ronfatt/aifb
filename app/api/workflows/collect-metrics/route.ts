@@ -10,7 +10,7 @@ import { isAuthorizedCronRequest } from "@/lib/utils";
 import { buildPromptUpdate } from "@/modules/optimizer/build-prompt-update";
 import { collectMetrics } from "@/modules/collector/collect-metrics";
 
-export async function POST(request: Request) {
+async function handleCollectMetrics(request: Request) {
   const authorized = isAuthorizedCronRequest(request.headers.get("authorization"), env.CRON_SECRET);
   if (!authorized) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
@@ -32,4 +32,12 @@ export async function POST(request: Request) {
     snapshots,
     promptUpdate
   });
+}
+
+export async function GET(request: Request) {
+  return handleCollectMetrics(request);
+}
+
+export async function POST(request: Request) {
+  return handleCollectMetrics(request);
 }
