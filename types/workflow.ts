@@ -13,6 +13,15 @@ export interface GenerateInput {
   dryRun?: boolean;
   imageGenerationEnabled?: boolean;
   imageStyle?: string;
+  storyContext?: StoryContext;
+}
+
+export interface StoryContext {
+  seriesTitle?: string;
+  nextEpisodeNumber: number;
+  previousEpisodeSummary?: string;
+  unresolvedThread?: string;
+  characters?: string[];
 }
 
 export interface DraftVariant {
@@ -24,12 +33,18 @@ export interface DraftVariant {
 }
 
 export interface DraftPayload {
+  seriesTitle?: string;
+  episodeNumber?: number;
+  episodeLabel?: string;
   hook: string[];
   body: string;
   ctaQuestion: string;
   tags: string[];
   sensitivityFlags: string[];
   variants: DraftVariant[];
+  storySummary?: string;
+  nextEpisodeHook?: string;
+  characters?: string[];
 }
 
 export interface QaResult {

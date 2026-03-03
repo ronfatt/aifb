@@ -7,7 +7,8 @@ import type {
   PublishResult,
   QaResult,
   RunListItem,
-  RunStatus
+  RunStatus,
+  StoryContext
 } from "@/types/workflow";
 
 interface CreateRunInput {
@@ -102,6 +103,40 @@ export async function getRecentFormattedTexts(pageId: string, limit = 30) {
   }
 
   return (data ?? []).flatMap((row) => (row.formatted_text ? [row.formatted_text] : []));
+}
+
+export async function getLatestStoryContext(pageId: string): Promise<StoryContext | null> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("drafts")
+    .select("draft_json, published_at, created_at, qa_status")
+    .eq("page_id", pageId)
+    .eq("qa_status", "PASS")
+    .order("published_at", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  const draft = (data?.draft_json as DraftPayload | null) ?? null;
+  if (!draft) {
+    return null;
+  }
+
+  return {
+    seriesTitle: draft.seriesTitle,
+    nextEpisodeNumber: typeof draft.episodeNumber === "number" ? draft.episodeNumber + 1 : 1,
+    previousEpisodeSummary: draft.storySummary ?? draft.body.slice(0, 240),
+    unresolvedThread: draft.nextEpisodeHook,
+    characters: draft.characters ?? []
+  };
 }
 
 export async function createDraftRecord(input: CreateDraftInput) {

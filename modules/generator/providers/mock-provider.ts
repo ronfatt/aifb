@@ -2,25 +2,33 @@ import type { DraftPayload } from "@/types/workflow";
 
 export async function generateDraftWithMock(): Promise<DraftPayload> {
   return {
+    seriesTitle: "Bila Hujan Turun Lagi",
+    episodeNumber: 1,
+    episodeLabel: "Episod 1",
     hook: [
-      "Kalau hidup tekan kau hari ini, baca sampai habis.",
-      "Ramai pura-pura kuat, tapi diam-diam penat.",
-      "Mungkin ini benda yang kau memang perlu dengar malam ini."
+      "Mira tak sangka lelaki yang hilang tujuh tahun lepas berdiri depan pintu rumah maknya malam tu.",
+      "Lelaki itu cuma sebut satu ayat sebelum hujan turun makin lebat.",
+      "\"Aku datang sebab ayah kau tinggalkan sesuatu untuk kau.\""
     ],
-    body: "Ada orang tiap hari nampak tenang. Kerja jalan. Senyum jalan. Balas mesej pun normal. Tapi dalam kepala, dia dah terlalu lama lawan benda yang orang lain tak nampak. Kadang-kadang bukan dia lemah. Dia cuma penat jadi kuat untuk semua orang serentak.",
-    ctaQuestion: "Kalau kau pernah sampai tahap macam ni, kau pilih diam dulu atau cari seseorang untuk bercerita?",
-    tags: ["#kisahhidup", "#realiti", "#fikirkan"],
+    body: "Sejak ayah Mira meninggal, rumah kayu di hujung kampung itu jadi terlalu sunyi. Mak Mira tak pernah sebut nama Arman lagi. Semua orang anggap lelaki itu dah lama lenyap bersama rahsia lama keluarga mereka.\n\nTapi malam itu, bila ketukan datang tiga kali, Mira sendiri yang buka pintu. Arman berdiri basah kuyup, muka lebih matang, mata tetap sama seperti malam dia pergi tanpa pesan. Dalam tangan dia ada sampul surat lama, tepi kertas itu dah hampir koyak.\n\n\"Aku janji aku takkan datang lagi lepas ni,\" kata Arman perlahan. \"Tapi sebelum aku pergi, kau kena tahu siapa ayah kau sebenarnya.\"\n\nJantung Mira terus jatuh. Dalam rumah, maknya yang nampak kelibat Arman terus pucat. Belum sempat Mira buka sampul itu, maknya menjerit, \"Jangan sentuh! Kalau kau baca, hidup kita takkan sama lagi.\"",
+    ctaQuestion: "Kalau korang jadi Mira, korang buka surat tu malam ni juga atau tunggu sampai pagi?",
+    tags: ["#DramaBersiri", "#MiraArman", "#RahsiaKeluarga"],
     sensitivityFlags: [],
+    storySummary:
+      "Mira bertemu semula dengan Arman yang muncul membawa surat peninggalan ayahnya, tetapi mak Mira cuba menghalang surat itu dibuka.",
+    nextEpisodeHook:
+      "Dalam episod seterusnya, Mira terpaksa memilih sama ada percaya pada maknya atau membuka surat yang mungkin bongkar asal-usul keluarganya.",
+    characters: ["Mira", "Arman", "Mak Mira"],
     variants: [
       {
         label: "B",
         hook: [
-          "Kadang-kadang yang paling banyak ketawa tu paling banyak simpan luka.",
-          "Orang nampak tenang, tapi hati dia dah lama sesak."
+          "Tujuh tahun Arman hilang tanpa khabar.",
+          "Tapi dia muncul semula tepat pada malam rahsia ayah Mira hampir terbongkar."
         ],
-        body: "Bukan semua orang pandai minta tolong. Ada yang dah biasa telan sendiri sampai orang ingat dia memang tak pernah jatuh. Padahal setiap malam dia tengah susun semula diri dia yang hampir pecah.",
-        ctaQuestion: "Bila kau susah, kau lebih rela pendam atau terus bercakap dengan orang yang kau percaya?",
-        tags: ["#ceritahidup", "#malaysia", "#realtalk"]
+        body: "Mira ingat luka lama itu dah selesai bila ayahnya dikebumikan. Tapi Arman datang semula dengan satu sampul surat, dan mak Mira terus berubah wajah. Dari ruang tamu yang gelap, satu nama lama disebut semula, nama yang selama ini dilarang berada dalam rumah itu.",
+        ctaQuestion: "Siapa sebenarnya yang korang rasa paling banyak sembunyikan rahsia, Arman atau mak Mira?",
+        tags: ["#NovelFacebook", "#MiraArman", "#RahsiaLama"]
       }
     ]
   };

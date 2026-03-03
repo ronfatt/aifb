@@ -49,6 +49,9 @@ export async function generateDraftWithOpenAI(input: GenerateInput): Promise<Dra
             type: "object",
             additionalProperties: false,
             properties: {
+              seriesTitle: { type: "string" },
+              episodeNumber: { type: "integer" },
+              episodeLabel: { type: "string" },
               hook: {
                 type: "array",
                 minItems: 1,
@@ -65,6 +68,13 @@ export async function generateDraftWithOpenAI(input: GenerateInput): Promise<Dra
               },
               sensitivityFlags: {
                 type: "array",
+                items: { type: "string" }
+              },
+              storySummary: { type: "string" },
+              nextEpisodeHook: { type: "string" },
+              characters: {
+                type: "array",
+                maxItems: 6,
                 items: { type: "string" }
               },
               variants: {
@@ -94,7 +104,20 @@ export async function generateDraftWithOpenAI(input: GenerateInput): Promise<Dra
                 }
               }
             },
-            required: ["hook", "body", "ctaQuestion", "tags", "sensitivityFlags", "variants"]
+            required: [
+              "seriesTitle",
+              "episodeNumber",
+              "episodeLabel",
+              "hook",
+              "body",
+              "ctaQuestion",
+              "tags",
+              "sensitivityFlags",
+              "storySummary",
+              "nextEpisodeHook",
+              "characters",
+              "variants"
+            ]
           }
         }
       },

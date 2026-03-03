@@ -3,6 +3,7 @@ import {
   createDraftRecord,
   createPostRecord,
   createRunRecord,
+  getLatestStoryContext,
   getRecentFormattedTexts,
   markDraftPublished
 } from "@/lib/repositories/workflow-repository";
@@ -29,14 +30,25 @@ export async function runDailyWorkflow(input: GenerateInput): Promise<WorkflowRu
   });
 
   const recentTexts = await getRecentFormattedTexts(input.pageId, 30);
-  const originalDraft = await generateDraft(input);
+  const storyContext = await getLatestStoryContext(input.pageId);
+  const originalDraft = await generateDraft({
+    ...input,
+    storyContext: storyContext ?? undefined
+  });
   const qaAttempts: QaResult[] = [];
   let draft = originalDraft;
   let qa = await runQa(draft, recentTexts, 1);
   qaAttempts.push(qa);
 
   if (qa.status === "SOFT_FAIL" && qa.rewritePrompt) {
-    draft = await rewriteDraft(input, draft, qa.rewritePrompt);
+    draft = await rewriteDraft(
+      {
+        ...input,
+        storyContext: storyContext ?? undefined
+      },
+      draft,
+      qa.rewritePrompt
+    );
     qa = await runQa(draft, recentTexts, 2);
     qaAttempts.push(qa);
   }
