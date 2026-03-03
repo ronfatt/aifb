@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { defaultPageConfig } from "@/lib/default-page-config";
-import { getPageConfig } from "@/lib/repositories/config-repository";
+import { getPrimaryPageConfig } from "@/lib/repositories/config-repository";
 import { env } from "@/lib/env";
 import {
   createMetricSnapshotRecord,
@@ -16,7 +15,7 @@ async function handleCollectMetrics(request: Request) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
 
-  const config = await getPageConfig(defaultPageConfig.pageId);
+  const config = await getPrimaryPageConfig();
   const posts = await getRecentPublishedPosts(config.pageId, 10);
   const livePosts = posts.filter((post) => post.publishMode === "live");
   const snapshots = await Promise.all(livePosts.map((post) => collectMetrics(post.id, post.fbPostId)));

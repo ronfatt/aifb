@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { defaultPageConfig } from "@/lib/default-page-config";
-import { getPageConfig } from "@/lib/repositories/config-repository";
+import { getPrimaryPageConfig } from "@/lib/repositories/config-repository";
 import { env } from "@/lib/env";
 import { isAuthorizedCronRequest } from "@/lib/utils";
 import { runDailyWorkflow } from "@/modules/orchestrator/run-daily-workflow";
@@ -11,7 +10,7 @@ async function handleDailyRun(request: Request) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
 
-  const config = await getPageConfig(defaultPageConfig.pageId);
+  const config = await getPrimaryPageConfig();
   const summary = await runDailyWorkflow({
     pageId: config.pageId,
     contentType: config.contentTypes[0] || "story_long",

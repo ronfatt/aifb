@@ -46,6 +46,30 @@ export async function getPageConfig(pageId: string) {
   return mapRowToPageConfig(data);
 }
 
+export async function getPrimaryPageConfig() {
+  const supabase = getSupabaseAdmin();
+  if (!supabase) {
+    return defaultPageConfig;
+  }
+
+  const { data, error } = await supabase
+    .from("config")
+    .select("*")
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    return defaultPageConfig;
+  }
+
+  return mapRowToPageConfig(data);
+}
+
 export async function upsertPageConfig(config: PageConfig) {
   const supabase = getSupabaseAdmin();
   if (!supabase) {

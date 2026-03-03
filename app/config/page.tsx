@@ -1,9 +1,8 @@
 import { ConfigForm } from "@/components/config-form";
-import { defaultPageConfig } from "@/lib/default-page-config";
-import { getPageConfig } from "@/lib/repositories/config-repository";
+import { getPrimaryPageConfig } from "@/lib/repositories/config-repository";
 
 export default async function ConfigPage() {
-  const config = await getPageConfig(defaultPageConfig.pageId);
+  const config = await getPrimaryPageConfig();
 
   return (
     <main style={{ maxWidth: 960, margin: "0 auto", padding: "48px 24px 80px" }}>

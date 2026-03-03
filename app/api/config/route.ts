@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { defaultPageConfig } from "@/lib/default-page-config";
-import { getPageConfig, upsertPageConfig } from "@/lib/repositories/config-repository";
+import { getPageConfig, getPrimaryPageConfig, upsertPageConfig } from "@/lib/repositories/config-repository";
 
 const pageConfigSchema = z.object({
   pageId: z.string().min(1),
@@ -21,8 +21,8 @@ const pageConfigSchema = z.object({
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const pageId = searchParams.get("pageId") || defaultPageConfig.pageId;
-  const config = await getPageConfig(pageId);
+  const pageId = searchParams.get("pageId");
+  const config = pageId ? await getPageConfig(pageId) : await getPrimaryPageConfig();
 
   return NextResponse.json({
     ok: true,
