@@ -8,9 +8,9 @@ export const defaultPageConfig: PageConfig = {
   imageGenerationEnabled: true,
   imageStyle: "cinematic human realism, warm editorial lighting, facebook-friendly portrait poster",
   language: "ms-MY",
-  tone: "emotional-realistic",
-  contentTypes: ["story_long", "short_rant"],
-  targetEmotions: ["anger_to_hope", "relief", "validation"],
+  tone: "dramatic-serial-realistic",
+  contentTypes: ["story_serial", "story_long"],
+  targetEmotions: ["suspense", "heartbreak", "anger_to_hope"],
   constraints: [
     "no real person accusation",
     "no hate",
@@ -18,6 +18,6 @@ export const defaultPageConfig: PageConfig = {
     "no racial conflict",
     "no medical advice"
   ],
-  ctaStyles: ["question", "vote", "what-would-you-do"],
-  hookPatterns: ["confessional", "hard-truth", "social-contrast"]
+  ctaStyles: ["what-happens-next", "what-would-you-do", "team-choice"],
+  hookPatterns: ["cliffhanger", "secret-reveal", "family-conflict"]
 };

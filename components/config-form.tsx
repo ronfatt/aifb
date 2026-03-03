@@ -74,6 +74,9 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
         <label style={{ display: "grid", gap: 6 }}>
           <span>Tone</span>
           <input value={config.tone} onChange={(event) => updateField("tone", event.target.value)} />
+          <small style={{ color: "var(--muted)" }}>
+            Suggested: <code>dramatic-serial-realistic</code>
+          </small>
         </label>
       </section>
 
@@ -127,6 +130,9 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
           value={toTextareaValue(config.contentTypes)}
           onChange={(event) => updateField("contentTypes", fromTextareaValue(event.target.value))}
         />
+        <small style={{ color: "var(--muted)" }}>
+          One per line. Suggested: <code>story_serial</code>, <code>story_long</code>
+        </small>
       </label>
       <label style={{ display: "grid", gap: 6 }}>
         <span>Target Emotions</span>
@@ -135,6 +141,9 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
           value={toTextareaValue(config.targetEmotions)}
           onChange={(event) => updateField("targetEmotions", fromTextareaValue(event.target.value))}
         />
+        <small style={{ color: "var(--muted)" }}>
+          Suggested: <code>suspense</code>, <code>heartbreak</code>, <code>anger_to_hope</code>
+        </small>
       </label>
       <label style={{ display: "grid", gap: 6 }}>
         <span>Constraints</span>
@@ -151,6 +160,9 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
           value={toTextareaValue(config.ctaStyles)}
           onChange={(event) => updateField("ctaStyles", fromTextareaValue(event.target.value))}
         />
+        <small style={{ color: "var(--muted)" }}>
+          Suggested: <code>what-happens-next</code>, <code>what-would-you-do</code>, <code>team-choice</code>
+        </small>
       </label>
       <label style={{ display: "grid", gap: 6 }}>
         <span>Hook Patterns</span>
@@ -159,6 +171,9 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
           value={toTextareaValue(config.hookPatterns)}
           onChange={(event) => updateField("hookPatterns", fromTextareaValue(event.target.value))}
         />
+        <small style={{ color: "var(--muted)" }}>
+          Suggested: <code>cliffhanger</code>, <code>secret-reveal</code>, <code>family-conflict</code>
+        </small>
       </label>
 
       <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
