@@ -22,6 +22,7 @@ interface CreateRunInput {
 interface CreateDraftInput {
   runId: string;
   pageId: string;
+  storySlot?: string;
   draft: DraftPayload;
   qa: QaResult;
   formattedText?: string;
@@ -32,6 +33,7 @@ interface CreateDraftInput {
 interface CreatePostInput {
   draftId?: string;
   pageId: string;
+  storySlot?: string;
   contentHash: string;
   publish: PublishResult;
   publishedAt: string;
@@ -84,19 +86,23 @@ export async function completeRunRecord(runId: string, status: RunStatus, errorM
   return true;
 }
 
-export async function getRecentFormattedTexts(pageId: string, limit = 30) {
+export async function getRecentFormattedTexts(pageId: string, storySlot?: string, limit = 30) {
   const supabase = getSupabaseAdmin();
   if (!supabase) {
     return [];
   }
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("drafts")
     .select("formatted_text")
     .eq("page_id", pageId)
-    .not("formatted_text", "is", null)
-    .order("created_at", { ascending: false })
-    .limit(limit);
+    .not("formatted_text", "is", null);
+
+  if (storySlot) {
+    query = query.eq("story_slot", storySlot);
+  }
+
+  const { data, error } = await query.order("created_at", { ascending: false }).limit(limit);
 
   if (error) {
     throw error;
@@ -105,17 +111,23 @@ export async function getRecentFormattedTexts(pageId: string, limit = 30) {
   return (data ?? []).flatMap((row) => (row.formatted_text ? [row.formatted_text] : []));
 }
 
-export async function getLatestStoryContext(pageId: string): Promise<StoryContext | null> {
+export async function getLatestStoryContext(pageId: string, storySlot?: string): Promise<StoryContext | null> {
   const supabase = getSupabaseAdmin();
   if (!supabase) {
     return null;
   }
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("drafts")
     .select("draft_json, published_at, created_at, qa_status")
     .eq("page_id", pageId)
-    .eq("qa_status", "PASS")
+    .eq("qa_status", "PASS");
+
+  if (storySlot) {
+    query = query.eq("story_slot", storySlot);
+  }
+
+  const { data, error } = await query
     .order("published_at", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false })
     .limit(1)
@@ -150,6 +162,7 @@ export async function createDraftRecord(input: CreateDraftInput) {
     .insert({
       run_id: input.runId,
       page_id: input.pageId,
+      story_slot: input.storySlot ?? "story-a",
       draft_json: input.draft,
       qa_result_json: input.qa,
       formatted_text: input.formattedText ?? null,
@@ -198,6 +211,7 @@ export async function createPostRecord(input: CreatePostInput) {
     .insert({
       draft_id: input.draftId ?? null,
       page_id: input.pageId,
+      story_slot: input.storySlot ?? "story-a",
       fb_post_id: input.publish.fbPostId,
       publish_mode: input.publish.mode ?? "live",
       content_hash: input.contentHash,

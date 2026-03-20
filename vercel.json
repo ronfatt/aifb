@@ -1,11 +1,15 @@
 {
   "crons": [
     {
-      "path": "/api/workflows/daily-run",
+      "path": "/api/workflows/daily-run?slot=story-a",
       "schedule": "0 3 * * *"
     },
     {
-      "path": "/api/workflows/daily-run",
+      "path": "/api/workflows/daily-run?slot=story-b",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/workflows/daily-run?slot=story-a",
       "schedule": "0 13 * * *"
     },
     {

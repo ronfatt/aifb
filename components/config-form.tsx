@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import type { PageConfig } from "@/types/config";
+import type { PageConfig, StorySlotConfig } from "@/types/config";
 
 function toTextareaValue(values: string[]) {
   return values.join("\n");
@@ -23,6 +23,13 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
     setConfig((current) => ({
       ...current,
       [key]: value
+    }));
+  }
+
+  function updateStorySlot(index: number, patch: Partial<StorySlotConfig>) {
+    setConfig((current) => ({
+      ...current,
+      storySlots: current.storySlots.map((slot, slotIndex) => (slotIndex === index ? { ...slot, ...patch } : slot))
     }));
   }
 
@@ -66,7 +73,7 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
           <input
             type="number"
             min={1}
-            max={2}
+            max={3}
             value={config.publishFrequencyPerDay}
             onChange={(event) => updateField("publishFrequencyPerDay", Number(event.target.value))}
           />
@@ -175,6 +182,79 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
           Suggested: <code>cliffhanger</code>, <code>secret-reveal</code>, <code>family-conflict</code>
         </small>
       </label>
+
+      <section style={{ display: "grid", gap: 18 }}>
+        <div>
+          <h2 style={{ margin: 0, fontSize: 24 }}>Story Slots</h2>
+          <p style={{ margin: "6px 0 0", color: "var(--muted)" }}>
+            Schedule: <code>story-a</code> runs at 11am and 9pm, <code>story-b</code> runs at 4pm Malaysia time.
+          </p>
+        </div>
+
+        {config.storySlots.map((slot, index) => (
+          <section
+            key={slot.key}
+            style={{
+              display: "grid",
+              gap: 12,
+              padding: 16,
+              border: "1px solid var(--border)",
+              borderRadius: 18,
+              background: "#fffdf7"
+            }}
+          >
+            <div>
+              <strong>{slot.label}</strong>
+              <div style={{ color: "var(--muted)", marginTop: 4 }}>
+                Slot key: <code>{slot.key}</code>
+              </div>
+            </div>
+
+            <label style={{ display: "grid", gap: 6 }}>
+              <span>Series Title</span>
+              <input value={slot.seriesTitle} onChange={(event) => updateStorySlot(index, { seriesTitle: event.target.value })} />
+            </label>
+
+            <label style={{ display: "grid", gap: 6 }}>
+              <span>Tone</span>
+              <input value={slot.tone} onChange={(event) => updateStorySlot(index, { tone: event.target.value })} />
+            </label>
+
+            <label style={{ display: "grid", gap: 6 }}>
+              <span>Target Emotion</span>
+              <input
+                value={slot.targetEmotion}
+                onChange={(event) => updateStorySlot(index, { targetEmotion: event.target.value })}
+              />
+            </label>
+
+            <label style={{ display: "grid", gap: 6 }}>
+              <span>Content Type</span>
+              <input
+                value={slot.contentType}
+                onChange={(event) => updateStorySlot(index, { contentType: event.target.value })}
+              />
+            </label>
+
+            <label style={{ display: "grid", gap: 6 }}>
+              <span>Characters</span>
+              <textarea
+                rows={3}
+                value={toTextareaValue(slot.characters)}
+                onChange={(event) => updateStorySlot(index, { characters: fromTextareaValue(event.target.value) })}
+              />
+            </label>
+
+            <label style={{ display: "grid", gap: 6 }}>
+              <span>Image Style Override</span>
+              <input
+                value={slot.imageStyle ?? ""}
+                onChange={(event) => updateStorySlot(index, { imageStyle: event.target.value })}
+              />
+            </label>
+          </section>
+        ))}
+      </section>
 
       <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
         <button

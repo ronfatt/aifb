@@ -4,6 +4,7 @@ export type RunStatus = "queued" | "running" | "completed" | "failed";
 
 export interface GenerateInput {
   pageId: string;
+  storySlot?: string;
   contentType: string;
   tone: string;
   targetEmotion: string;

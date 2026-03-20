@@ -3,10 +3,21 @@ import { z } from "zod";
 import { defaultPageConfig } from "@/lib/default-page-config";
 import { getPageConfig, getPrimaryPageConfig, upsertPageConfig } from "@/lib/repositories/config-repository";
 
+const storySlotSchema = z.object({
+  key: z.string().min(1),
+  label: z.string().min(1),
+  seriesTitle: z.string().min(1),
+  contentType: z.string().min(1),
+  tone: z.string().min(1),
+  targetEmotion: z.string().min(1),
+  imageStyle: z.string().min(1).optional(),
+  characters: z.array(z.string().min(1)).min(1)
+});
+
 const pageConfigSchema = z.object({
   pageId: z.string().min(1),
   pageName: z.string().min(1),
-  publishFrequencyPerDay: z.number().int().min(1).max(2),
+  publishFrequencyPerDay: z.number().int().min(1).max(3),
   dryRun: z.boolean(),
   imageGenerationEnabled: z.boolean(),
   imageStyle: z.string().min(1),
@@ -16,7 +27,8 @@ const pageConfigSchema = z.object({
   targetEmotions: z.array(z.string().min(1)).min(1),
   constraints: z.array(z.string().min(1)).min(1),
   ctaStyles: z.array(z.string().min(1)).min(1),
-  hookPatterns: z.array(z.string().min(1)).min(1)
+  hookPatterns: z.array(z.string().min(1)).min(1),
+  storySlots: z.array(storySlotSchema).min(1)
 });
 
 export async function GET(request: Request) {

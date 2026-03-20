@@ -24,16 +24,27 @@ export async function runDailyWorkflow(input: GenerateInput): Promise<WorkflowRu
     workflowName: "daily-run",
     status: "running",
     meta: {
+      storySlot: input.storySlot,
       contentType: input.contentType,
       tone: input.tone
     }
   });
 
-  const recentTexts = await getRecentFormattedTexts(input.pageId, 30);
-  const storyContext = await getLatestStoryContext(input.pageId);
+  const recentTexts = await getRecentFormattedTexts(input.pageId, input.storySlot, 30);
+  const latestStoryContext = await getLatestStoryContext(input.pageId, input.storySlot);
+  const storyContext = {
+    ...input.storyContext,
+    ...latestStoryContext,
+    seriesTitle: latestStoryContext?.seriesTitle ?? input.storyContext?.seriesTitle,
+    characters:
+      latestStoryContext?.characters && latestStoryContext.characters.length > 0
+        ? latestStoryContext.characters
+        : (input.storyContext?.characters ?? []),
+    nextEpisodeNumber: latestStoryContext?.nextEpisodeNumber ?? input.storyContext?.nextEpisodeNumber ?? 1
+  };
   const originalDraft = await generateDraft({
     ...input,
-    storyContext: storyContext ?? undefined
+    storyContext
   });
   const qaAttempts: QaResult[] = [];
   let draft = originalDraft;
@@ -44,7 +55,7 @@ export async function runDailyWorkflow(input: GenerateInput): Promise<WorkflowRu
     draft = await rewriteDraft(
       {
         ...input,
-        storyContext: storyContext ?? undefined
+        storyContext
       },
       draft,
       qa.rewritePrompt
@@ -59,6 +70,7 @@ export async function runDailyWorkflow(input: GenerateInput): Promise<WorkflowRu
     const draftRecord = await createDraftRecord({
       runId,
       pageId: input.pageId,
+      storySlot: input.storySlot,
       draft,
       qa,
       contentHash,
@@ -85,6 +97,7 @@ export async function runDailyWorkflow(input: GenerateInput): Promise<WorkflowRu
   const draftRecord = await createDraftRecord({
     runId,
     pageId: input.pageId,
+    storySlot: input.storySlot,
     draft,
     qa,
     formattedText,
@@ -124,6 +137,7 @@ export async function runDailyWorkflow(input: GenerateInput): Promise<WorkflowRu
       ? await createPostRecord({
           draftId: draftRecord?.id,
           pageId: input.pageId,
+          storySlot: input.storySlot,
           contentHash,
           publish,
           publishedAt

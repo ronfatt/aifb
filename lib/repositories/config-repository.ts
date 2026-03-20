@@ -1,6 +1,28 @@
 import { defaultPageConfig } from "@/lib/default-page-config";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import type { PageConfig } from "@/types/config";
+import type { PageConfig, StorySlotConfig } from "@/types/config";
+
+function mapStorySlots(value: unknown): StorySlotConfig[] {
+  if (!Array.isArray(value)) {
+    return defaultPageConfig.storySlots;
+  }
+
+  return value
+    .map((slot) => {
+      const row = slot as Record<string, unknown>;
+      return {
+        key: String(row.key ?? ""),
+        label: String(row.label ?? ""),
+        seriesTitle: String(row.seriesTitle ?? row.series_title ?? ""),
+        contentType: String(row.contentType ?? row.content_type ?? "story_serial"),
+        tone: String(row.tone ?? defaultPageConfig.tone),
+        targetEmotion: String(row.targetEmotion ?? row.target_emotion ?? defaultPageConfig.targetEmotions[0]),
+        imageStyle: String(row.imageStyle ?? row.image_style ?? defaultPageConfig.imageStyle),
+        characters: Array.isArray(row.characters) ? row.characters.map(String) : []
+      };
+    })
+    .filter((slot) => slot.key && slot.label && slot.seriesTitle);
+}
 
 function mapRowToPageConfig(row: Record<string, unknown>): PageConfig {
   return {
@@ -18,7 +40,8 @@ function mapRowToPageConfig(row: Record<string, unknown>): PageConfig {
       : defaultPageConfig.targetEmotions,
     constraints: Array.isArray(row.constraints) ? (row.constraints as string[]) : defaultPageConfig.constraints,
     ctaStyles: Array.isArray(row.cta_styles) ? (row.cta_styles as string[]) : defaultPageConfig.ctaStyles,
-    hookPatterns: Array.isArray(row.hook_patterns) ? (row.hook_patterns as string[]) : defaultPageConfig.hookPatterns
+    hookPatterns: Array.isArray(row.hook_patterns) ? (row.hook_patterns as string[]) : defaultPageConfig.hookPatterns,
+    storySlots: mapStorySlots(row.story_slots)
   };
 }
 
@@ -91,6 +114,7 @@ export async function upsertPageConfig(config: PageConfig) {
     target_emotions: config.targetEmotions,
     cta_styles: config.ctaStyles,
     hook_patterns: config.hookPatterns,
+    story_slots: config.storySlots,
     updated_at: new Date().toISOString()
   };
 

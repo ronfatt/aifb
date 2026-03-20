@@ -16,6 +16,7 @@ create table if not exists config (
   target_emotions jsonb not null default '[]'::jsonb,
   cta_styles jsonb not null default '[]'::jsonb,
   hook_patterns jsonb not null default '[]'::jsonb,
+  story_slots jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -36,6 +37,7 @@ create table if not exists drafts (
   id uuid primary key default gen_random_uuid(),
   run_id text not null references runs(run_id) on delete cascade,
   page_id text not null,
+  story_slot text not null default 'story-a',
   draft_json jsonb not null,
   qa_result_json jsonb,
   formatted_text text,
@@ -51,6 +53,7 @@ create table if not exists posts (
   id uuid primary key default gen_random_uuid(),
   draft_id uuid references drafts(id) on delete set null,
   page_id text not null,
+  story_slot text not null default 'story-a',
   fb_post_id text not null unique,
   publish_mode text not null default 'live',
   content_hash text not null,

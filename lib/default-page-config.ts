@@ -3,7 +3,7 @@ import type { PageConfig } from "@/types/config";
 export const defaultPageConfig: PageConfig = {
   pageId: "PAGE_A",
   pageName: "Malay Viral Stories",
-  publishFrequencyPerDay: 1,
+  publishFrequencyPerDay: 3,
   dryRun: true,
   imageGenerationEnabled: true,
   imageStyle: "cinematic human realism, warm editorial lighting, facebook-friendly portrait poster",
@@ -19,5 +19,27 @@ export const defaultPageConfig: PageConfig = {
     "no medical advice"
   ],
   ctaStyles: ["what-happens-next", "what-would-you-do", "team-choice"],
-  hookPatterns: ["cliffhanger", "secret-reveal", "family-conflict"]
+  hookPatterns: ["cliffhanger", "secret-reveal", "family-conflict"],
+  storySlots: [
+    {
+      key: "story-a",
+      label: "Main Story A",
+      seriesTitle: "Bila Hujan Turun Lagi",
+      contentType: "story_serial",
+      tone: "dramatic-serial-realistic",
+      targetEmotion: "suspense",
+      imageStyle: "cinematic human realism, warm editorial lighting, rain-soaked family drama poster",
+      characters: ["Mira", "Arman", "Mak Mira"]
+    },
+    {
+      key: "story-b",
+      label: "New Story B",
+      seriesTitle: "Harga Sebuah Janji",
+      contentType: "story_serial",
+      tone: "dramatic-serial-realistic",
+      targetEmotion: "heartbreak",
+      imageStyle: "cinematic human realism, warm dusk lighting, betrayal and family drama poster",
+      characters: ["Sara", "Hafiz", "Puan Nani"]
+    }
+  ]
 };
