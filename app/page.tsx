@@ -1,7 +1,6 @@
 import { Dashboard } from "@/components/dashboard";
 import { RunStatusPanel } from "@/components/run-status-panel";
-import { defaultPageConfig } from "@/lib/default-page-config";
-import { getPageConfig } from "@/lib/repositories/config-repository";
+import { getPrimaryPageConfig } from "@/lib/repositories/config-repository";
 import {
   getLatestPublishedSummary,
   getRecentPublishes,
@@ -9,7 +8,7 @@ import {
 } from "@/lib/repositories/workflow-repository";
 
 export default async function HomePage() {
-  const config = await getPageConfig(defaultPageConfig.pageId);
+  const config = await getPrimaryPageConfig();
   const [runs, publishes, latestPublished] = await Promise.all([
     getRecentRuns(config.pageId, 6),
     getRecentPublishes(config.pageId, 6),

@@ -28,7 +28,7 @@ const pageConfigSchema = z.object({
   constraints: z.array(z.string().min(1)).min(1),
   ctaStyles: z.array(z.string().min(1)).min(1),
   hookPatterns: z.array(z.string().min(1)).min(1),
-  storySlots: z.array(storySlotSchema).min(1)
+  storySlots: z.array(storySlotSchema).min(1).optional()
 });
 
 export async function GET(request: Request) {
@@ -44,7 +44,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const payload = pageConfigSchema.parse(await request.json());
-  const config = await upsertPageConfig(payload);
+  const config = await upsertPageConfig({
+    ...defaultPageConfig,
+    ...payload,
+    storySlots: payload.storySlots ?? defaultPageConfig.storySlots
+  });
 
   return NextResponse.json({
     ok: true,

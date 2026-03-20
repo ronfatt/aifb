@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { PageConfig, StorySlotConfig } from "@/types/config";
+import { defaultPageConfig } from "@/lib/default-page-config";
 
 function toTextareaValue(values: string[]) {
   return values.join("\n");
@@ -15,7 +16,14 @@ function fromTextareaValue(value: string) {
 }
 
 export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
-  const [config, setConfig] = useState<PageConfig>(initialConfig);
+  const [config, setConfig] = useState<PageConfig>({
+    ...defaultPageConfig,
+    ...initialConfig,
+    storySlots:
+      Array.isArray(initialConfig.storySlots) && initialConfig.storySlots.length > 0
+        ? initialConfig.storySlots
+        : defaultPageConfig.storySlots
+  });
   const [status, setStatus] = useState<string>("");
   const [isPending, startTransition] = useTransition();
 
@@ -52,7 +60,14 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
         return;
       }
 
-      setConfig(result.config);
+      setConfig({
+        ...defaultPageConfig,
+        ...result.config,
+        storySlots:
+          Array.isArray(result.config.storySlots) && result.config.storySlots.length > 0
+            ? result.config.storySlots
+            : defaultPageConfig.storySlots
+      });
       setStatus("Saved");
     });
   }
@@ -191,7 +206,7 @@ export function ConfigForm({ initialConfig }: { initialConfig: PageConfig }) {
           </p>
         </div>
 
-        {config.storySlots.map((slot, index) => (
+        {(config.storySlots ?? defaultPageConfig.storySlots).map((slot, index) => (
           <section
             key={slot.key}
             style={{
